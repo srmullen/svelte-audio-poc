@@ -1,12 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Tailwind from './Tailwind.svelte';
-  import AudioContext from './audio/AudioContext.svelte';
-  import Gain from './audio/Gain.svelte';
-  import Oscillator from './audio/Oscillator.svelte';
-  import BiquadFilter from './audio/BiquadFilter.svelte';
+  import { Context, Gain, Oscillator, BiquadFilter } from './audio';
 
-  let ctx: window.AudioContext;
+  let ctx: Context;
 
   function start() {
     ctx.resume();
@@ -29,16 +26,27 @@
   let modGain = 5;
   let modFreq = 20;
 
+  let status: string;
+
+  let trigger = false;
+
   onMount(() => {
     ctx.suspend();
   });
+
+  function triggerSound() {
+    trigger = true;
+    setTimeout(() => {
+      trigger = false;
+    }, 1000);
+  }
 </script>
 
 <Tailwind />
 
 <div class="p-4">
   <h1 class="font-bold text-3xl">FM Svnth</h1>
-
+  <div>Status: {status}</div>
   <div class="flex flex-wrap">
     <div class="border-2 border-gray-900 m-4 p-8">
       <label class="block" for="mastergain">Master Gain</label>
@@ -112,18 +120,27 @@
       >
         Stop
       </button>
+
+      <button
+        class="bg-gray-900 text-white px-8 py-4 m-12 font-bold"
+        on:click={triggerSound}
+      >
+        Trigger
+      </button>
     </div>
   </div>
 </div>
 
-<AudioContext bind:this={ctx} let:node>
-  <BiquadFilter type={filterType} frequency={filterFreq} dest={node} let:node>
-    <Gain {gain} dest={node} let:node>
-      <Oscillator frequency={frequency} type={carrierType} dest={node} let:node>
-        <Gain gain={modGain} dest={node.frequency} let:node>
-          <Oscillator frequency={modFreq} type={modulatorType} dest={node} />
-        </Gain>
-      </Oscillator>
-    </Gain>
-  </BiquadFilter>
-</AudioContext>
+<Context bind:this={ctx} let:node on:statechange={(e) => status = e.detail}>
+  {#if trigger}
+    <BiquadFilter type={filterType} frequency={filterFreq} dest={node} let:node>
+      <Gain {gain} dest={node} let:node>
+        <Oscillator frequency={frequency} type={carrierType} dest={node} let:node>
+          <Gain gain={modGain} dest={node.frequency} let:node>
+            <Oscillator frequency={modFreq} type={modulatorType} dest={node} />
+          </Gain>
+        </Oscillator>
+      </Gain>
+    </BiquadFilter>
+  {/if}
+</Context>

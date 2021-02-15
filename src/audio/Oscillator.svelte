@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import { key } from './key';
   import { getContext } from 'svelte';
 
@@ -11,6 +12,10 @@
   const node = ctx.createOscillator();
   node.type = type;
   node.frequency.setValueAtTime(frequency, ctx.currentTime);
+
+  onDestroy(() => {
+    node.stop();
+  });
 
   if (dest) {
     node.connect(dest);
