@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import Tailwind from './Tailwind.svelte';
   import AudioContext from './AudioContext.svelte';
   import Gain from './Gain.svelte';
@@ -27,78 +28,90 @@
   let frequency = 440;
   let modGain = 5;
   let modFreq = 20;
+
+  onMount(() => {
+    ctx.suspend();
+  });
 </script>
 
 <Tailwind />
 
 <div class="p-4">
-  <h1>FM Synth</h1>
-  <button
-    class="bg-gray-900 text-white px-8 py-4 m-12 font-bold"
-    on:click={start}
-  >
-    Start
-  </button>
+  <h1 class="font-bold text-3xl">FM Svnth</h1>
 
-  <button
-    class="bg-gray-900 text-white px-8 py-4 m-12 font-bold"
-    on:click={stop}
-  >
-    Stop
-  </button>
-
-  <div>
-    <label class="block" for="mastergain">Master Gain</label>
-    <input id="mastergain" type="range" min={0} max={1} step={0.01} bind:value={gain} />
-    <span>{gain}</span>
-  </div>
-
-  <div>
-    <h2>Filter</h2>
-    <label for="filterType">Type</label>
-    <select id="filterType" bind:value={filterType}>
-      {#each filterTypes as type}
-        <option value={type}>{type}</option>
-      {/each}
-    </select>
-    <label for="filterFreq">Frequency</label>
-    <input id="filterFreq" type="range" min={20} max={2000} bind:value={filterFreq} />
-  </div>
-
-  <div>
-    <h2>Carrier</h2>
-    <label for="carrierType">Oscillator</label>
-    <select id="carrierType" bind:value={carrierType}>
-      {#each oscTypes as type}
-        <option value={type}>{type}</option>
-      {/each}
-    </select>
-    <div>
-      <label class="block" for="frequency">Frequency</label>
-      <input id="frequency" type="range" min={20} max={1000} bind:value={frequency} />
-      <span>{frequency}</span>
-    </div>
-  </div>
-
-  <div>
-    <h2>Modulator</h2>
-    <div>
-      <label class="block" for="amp">Modulator amplitude</label>
-      <input id="amp" type="range" min={0} max={200} bind:value={modGain} />
-      <span>{modGain}</span>
+  <div class="flex flex-wrap">
+    <div class="border-2 border-gray-900 m-4 p-8">
+      <label class="block" for="mastergain">Master Gain</label>
+      <input id="mastergain" type="range" min={0} max={1} step={0.01} bind:value={gain} />
+      <span class="text-center bg-yellow-50 w-10 inline-block">{gain}</span>
     </div>
 
-    <label for="carrierType">Oscillator</label>
-    <select id="carrierType" bind:value={modulatorType}>
-      {#each oscTypes as type}
-        <option value={type}>{type}</option>
-      {/each}
-    </select>
+    <div class="border-2 border-gray-900 m-4 p-8">
+      <h2 class="font-bold text-xl">Filter</h2>
+      <label for="filterType">Type</label>
+      <select id="filterType" bind:value={filterType}>
+        {#each filterTypes as type}
+          <option value={type}>{type}</option>
+        {/each}
+      </select>
+      <div>
+        <label for="filterFreq">Frequency</label>
+        <input id="filterFreq" type="range" min={20} max={2000} bind:value={filterFreq} />
+        <span class="text-center bg-yellow-50 w-10 inline-block">{filterFreq}</span>
+      </div>
+    </div>
+
+    <div class="border-2 border-gray-900 m-4 p-8">
+      <h2>Carrier</h2>
+      <label for="carrierType">Oscillator</label>
+      <select id="carrierType" bind:value={carrierType}>
+        {#each oscTypes as type}
+          <option value={type}>{type}</option>
+        {/each}
+      </select>
+      <div>
+        <label class="block" for="frequency">Frequency</label>
+        <input id="frequency" type="range" min={20} max={1000} bind:value={frequency} />
+        <span class="text-center bg-yellow-50 w-10 inline-block">{frequency}</span>
+      </div>
+    </div>
+
+    <div class="border-2 border-gray-900 m-4 p-8">
+      <h2>Modulator</h2>
+      <div>
+        <label class="block" for="amp">Modulator amplitude</label>
+        <input id="amp" type="range" min={0} max={200} bind:value={modGain} />
+        <span>{modGain}</span>
+      </div>
+
+      <label for="carrierType">Oscillator</label>
+      <select id="carrierType" bind:value={modulatorType}>
+        {#each oscTypes as type}
+          <option value={type}>{type}</option>
+        {/each}
+      </select>
+
+      <div>
+        <label class="block" for="modfreq">Modulator frequency</label>
+        <input id="modfreq" type="range" min={0} max={1000} bind:value={modFreq} />
+        <span class="text-center bg-yellow-50 w-10 inline-block">{modFreq}</span>
+      </div>
+    </div>
 
     <div>
-      <label class="block" for="modfreq">Modulator frequency</label>
-      <input id="modfreq" type="range" min={0} max={1000} bind:value={modFreq} />
-      <span>{modFreq}</span>
+      <button
+        class="bg-gray-900 text-white px-8 py-4 m-12 font-bold"
+        on:click={start}
+      >
+        Start
+      </button>
+
+      <button
+        class="bg-gray-900 text-white px-8 py-4 m-12 font-bold"
+        on:click={stop}
+      >
+        Stop
+      </button>
     </div>
   </div>
 </div>
