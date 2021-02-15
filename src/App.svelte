@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Tailwind from './Tailwind.svelte';
-  import AudioContext from './AudioContext.svelte';
-  import Gain from './Gain.svelte';
-  import Oscillator from './Oscillator.svelte';
-  import BiquadFilter from './BiquadFilter.svelte';
+  import AudioContext from './audio/AudioContext.svelte';
+  import Gain from './audio/Gain.svelte';
+  import Oscillator from './audio/Oscillator.svelte';
+  import BiquadFilter from './audio/BiquadFilter.svelte';
 
   let ctx: window.AudioContext;
 
