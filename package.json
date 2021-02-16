@@ -41,6 +41,7 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
+    "a-d-s-r": "^1.1.0",
     "sirv-cli": "^1.0.10",
     "tailwindcss": "^2.0.2"
   }
